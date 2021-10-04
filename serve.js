@@ -75,6 +75,14 @@ function filterByQuery(query, notesArray) {
     res.json(results);
   });
 
+  app.get('/notes', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/notes.html'));
+  });
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/index.html'));
+  });
+  
   //error message
   app.get('/api/notes/:id', (req, res) => {
     const result = findById(req.params.id, notes);
