@@ -21,6 +21,11 @@ function filterByQuery(query, notesArray) {
     return filteredResults;
   }
 
+  function findById(id, notesArray) {
+    const result = notesArray.filter(notes => notes.id === id)[0];
+    return result;
+  }
+
 //get route
 app.get('/api/notes', (req, res) => {
     let results = notes;
@@ -28,6 +33,21 @@ app.get('/api/notes', (req, res) => {
       results = filterByQuery(req.query, results);
     }
     res.json(results);
+  });
+//get route
+  app.get('/api/notes/:id', (req, res) => {
+    const result = findById(req.params.id, notes);
+      res.json(result);
+  });
+
+  //error message
+  app.get('/api/notes/:id', (req, res) => {
+    const result = findById(req.params.id, notes);
+    if (result) {
+      res.json(result);
+    } else {
+      res.send(404);
+    }
   });
 
 //listen method
