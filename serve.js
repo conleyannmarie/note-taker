@@ -1,3 +1,6 @@
+//node modules
+const fs = require('fs');
+const path = require('path');
 const express = require('express');
 //route to request data
 const { notes } = require('./db/notes');
@@ -5,14 +8,12 @@ const { notes } = require('./db/notes');
 const PORT = process.env.PORT || 3002;
 //instantiate the server with express
 const app = express();
-//node modules
-const fs = require('fs');
-const path = require('path');
 
 // parse incoming string or array data
 app.use(express.urlencoded({ extended: true }));
 // parse incoming JSON data
 app.use(express.json());
+app.use(express.static('public'));
 
 //filter function
 function filterByQuery(query, notesArray) {
@@ -40,8 +41,8 @@ function filterByQuery(query, notesArray) {
   }
   
   //find id
-  function findById(id, notesArray) {
-    const result = notesArray.filter(notes => notes.id === id)[0];
+  function findByTitle(title, notesArray) {
+    const result = notesArray.filter(notes => notes.title === title)[0];
     return result;
   }
 
@@ -96,6 +97,10 @@ app.post('/api/notes', (req, res) => {
     const note = createNewNote(req.body, notes);
     res.json(note);
   }
+});
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, './public/assets/index.html'));
 });
 
 //listen method
