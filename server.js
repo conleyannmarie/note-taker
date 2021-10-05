@@ -2,10 +2,10 @@
 const fs = require("fs");
 const path = require("path");
 const express = require("express");
-//route to request data
-const { notes } = require("./db/notes");
+
 //set port
-const PORT = process.env.PORT || 3002;
+const PORT = process.env.PORT || 3003;
+
 //instantiate the server with express
 const app = express();
 //routes variables
@@ -16,12 +16,14 @@ const htmlRoutes = require("./routes/htmlRoutes");
 app.use(express.urlencoded({ extended: true }));
 // parse incoming JSON data
 app.use(express.json());
+
 app.use(express.static("public"));
+
+app.use(apiRoutes);
+app.use(htmlRoutes);
 
 //listen method
 app.listen(PORT, () => {
   console.log(`API server now on port ${PORT}!`);
 });
 
-app.use("/api", apiRoutes);
-app.use("/", htmlRoutes);
